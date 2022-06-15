@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Solidaridad | Login</title>
+    <link rel="shortcut icon" href="../images/favicon.jpg" type="image/x-icon">
+    <link rel="icon" href="../images/favicon.jpg" type="image/x-icon">
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4"></div>
+            <div class="col-lg-4">
+                <img class="img-responsive" src= "../images/solidaridad_logo.png" id="img" 
+                >
+                <div class="overlay" style="margin-top:-50px;">
+                  <form method="POST" action="{{url_for('signup')}}">
+                    <div class="con">
+                        <header class="head-form">
+                           <h2>Sign Up</h2>
+                           <p>Welcome to the portal</p>
+                        </header>
+                    <!-- {%with messages = get_flashed_messages()%}
+
+    {%if messages%}
+
+    {% for message in messages %}
+
+
+
+
+    <div class="alert alert-warning alert-dismissable" role="alert" style="width:auto">
+
+     <button type="button" class="close" data-dismiss="alert" aria-label ="close" style="width:10px;height:10px;color:red">
+
+         <span aria-hidden="true">&times;</span>
+
+     </button>
+        
+     {{message}}
+
+
+
+    </div>
+
+
+    {%endfor%}
+    {%endif%}
+    {%endwith%}
+                 -->
+    <div class="field-set">
+      
+        <div class="form-group" STYLE="margin-top:-40px;">
+         <input type="email" class="form-control" placeholder="E-Mail" name="email" id="email" data-cat1-url="{{url_for('checkmail')}}" required>
+         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+      <script>
+          $("#email").change(function () {
+            const url = $("#email").attr("data-cat1-url");
+              const mail_id = $(this).val();  // get the selected country ID from the HTML input
+
+              $.ajax({ 
+                  url: url,                   // set the url of the request (= /persons/ajax/load-cities/ )
+                  data: {
+                      'mail_id': mail_id       // add the country id to the GET parameters
+                  },
+                  success: function (data) {
+                    console.log((data).length);
+                    var check_mail = (data).length;
+                    if (check_mail == 1)
+                      alert("This Mail-id alredy exists!")
+                  }
+              });
+
+
+          });
+      </script>
+         </div>
+         <div class="form-group">
+           <input type="text" class="form-control" placeholder="Name" name="name" id="name" required>
+         </div>
+        <div class="row">
+          <div class="col-lg-4">
+         <div class="form-group">
+          <select class="form-control" id="country" name="country" data-cnty-url="{{url_for('country_code')}}">
+            <option value="">country</option>
+            {% for cuntry in country %}
+            <option value="{{cuntry.code_id}}"> {{cuntry.cntry}}</option>
+            {%endfor%}
+          </select>
+          <script>
+              $("#country").change(function () {
+                const url = $("#country").attr("data-cnty-url");
+                  const cnty_code = $(this).val();  // get the selected country ID from the HTML input
+
+                  $.ajax({ 
+                      url: url,                   // set the url of the request (= /persons/ajax/load-cities/ )
+                      data: {
+                          'cnty_code': cnty_code       // add the country id to the GET parameters
+                      },
+                      success: function (data) {   // `data` is the return of the `load_cities` view function
+                            // replace the contents of the city input with the data that came from the server
+                          console.log(data[0].phcode);
+                          let html_data = `<input type="text" class="form-control" value="${data[0].phcode}" readonly>`;
+                           
+                              //html_data += `<input type="text class="form-control" value="${subcat.phcode}">`
+                          
+                          $("#country_code").html(html_data);
+
+                      }
+                  });
+
+
+              });
+          </script>
+        </div>
+          </div>
+          <div class="col-lg-3">
+              <div id="country_code" name="country_code">
+                  <input type="" placeholder="C-Code" class="form-control">
+              </div>
+          </div>
+          <div class="col-lg-5">
+         <div class="form-group">
+            <input type="tel" class="form-control" placeholder="Phone" name="phone" id="phone" minlength="10" maxlength="15" required>
+          </div>
+        </div>
+        </div>
+          <div class="form-group">
+            <select class="form-control" name="choosePosition" id="choosePosition">
+              <option>Choose Position</option>
+              {% for row in pos %}
+              <option value="{{row.0}}">{{row.0}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <select class="form-control" name="chooseREC"  id="chooseREC">
+              <option>Choose REC</option>
+              {% for row in rec %}
+              <option value="{{row.0}}">{{row.0}}</option>
+              {% endfor %}
+            </select> 
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" placeholder="password"  name="pwd" id="pwd" required>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" placeholder="confirm password" name="confpwd" id="confpwd" required>
+          </div>
+            <div>
+              <button type="submit" class="log-in" style="align-content: center;" id="button">SignUp</button>
+            </script>
+            </div>
+            <!-- <div>
+            <P style="text-align: center;">already signed up?</P>
+            </div> -->
+            <div>
+              <p style="text-align: center;margin-top:-12px;"><a href="{{url_for('login')}}">Click here to Login</a></p>
+            </div> 
+      </form>     
+   </div>
+</div>
+</div>
+
+
+<style>
+  @import url('https://fonts.googleapis.com/css?family=Abel|Abril+Fatface|Alegreya|Arima+Madurai|Dancing+Script|Dosis|Merriweather|Oleo+Script|Overlock|PT+Serif|Pacifico|Playball|Playfair+Display|Share|Unica+One|Vibur');
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-image: linear-gradient(-225deg, #EAE5C9 0%, #6CC6CB 100%);
+background-image: linear-gradient(to top, #EAE5C9 0%, #6CC6CB 100%);
+background-attachment: fixed;
+background-repeat: no-repeat;
+
+  font-family: 'Vibur', cursive;
+  font-family: 'Abel', sans-serif;
+opacity: .95;
+}
+
+
+
+img{
+  height:80px;
+  width:170px;
+  margin-left:-450px;
+
+}
+
+form {
+  width: 450px;
+  min-height: 500px;
+  height: auto;
+  border-radius: 5px;
+  margin: 2% auto;
+  box-shadow: 0 9px 50px hsla(20, 67%, 75%, 0.31);
+  padding: 2%;
+  background-image: linear-gradient(-225deg, #E3FDF5 50%, #FFE6FA 50%);
+}
+/* form Container */
+form .con {
+  display: -webkit-flex;
+  display: flex;
+
+  -webkit-justify-content: space-around;
+  justify-content: space-around;
+
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+
+    margin: 0 auto;
+}
+
+/* the header form form */
+header {
+  margin: 2% auto 10% auto;
+  text-align: center;
+}
+/* Login title form form */
+header h2 {
+  font-size: 250%;
+  font-family: 'Playfair Display', serif;
+  color: #3e403f;
+}
+/*  A welcome message or an explanation of the login form */
+header p {letter-spacing: 0.05em;}
+
+
+
+
+.input-item {
+  background: #fff;
+  color: #333;
+  padding: 14.5px 0px 15px 9px;
+  border-radius: 5px 0px 0px 5px;
+  margin-left:50px;
+}
+
+
+
+/* Show/hide password Font Icon */
+
+/* inputs form  */
+input[class="form-input"]{
+  width: 240px;
+  height: 50px;
+
+  margin-top: 2%;
+  padding: 15px;
+  
+  font-size: 16px;
+  font-family: 'Abel', sans-serif;
+  color: #5E6472;
+
+  outline: none;
+  border: none;
+
+  border-radius: 0px 5px 5px 0px;
+  transition: 0.2s linear;
+  
+}
+input[id="txt-input"] {width: 250px;}
+/* focus  */
+input:focus {
+  transform: translateX(-2px);
+  border-radius: 5px;
+}
+
+
+button {
+  display: inline-block;
+  color: #252537;
+
+  width: 280px;
+  height: 50px;
+
+  padding: 0 20px;
+  background: rgb(119, 164, 216);
+  border-radius: 5px;
+  
+  outline: none;
+  border: none;
+
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s linear;
+  
+  margin: 7% auto;
+  margin-left:80px;
+  margin-top:10px;
+  letter-spacing: 0.05em;
+}
+/* Submits */
+.submits {
+  width: 48%;
+  display: inline-block;
+  float: left;
+  margin-left: 2%;
+}
+
+/*       Forgot Password button FAF3DD  */
+.frgt-pass {
+  background: transparent;
+}
+
+/*     Sign Up button  */
+.sign-up {background: #B8F2E6;}
+
+
+/* buttons hover */
+button:hover {
+  transform: translatey(3px);
+  box-shadow: none;
+}
+
+/* buttons hover Animation */
+button:hover {
+  animation: ani9 0.4s ease-in-out infinite alternate;
+}
+@keyframes ani9 {
+  0% {
+      transform: translateY(3px);
+  }
+  100% {
+      transform: translateY(5px);
+  }
+}
+</style>
+
+
+
+
+
+</body>
+</html>
